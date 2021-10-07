@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
+    Route::post('/login', 'LoginController@customerEmailLogin');
+    Route::post('/signup', 'LoginController@userSignUp');
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('/update_vehicle_detail', 'LoginController@updateCarDetail');
+    });
 });

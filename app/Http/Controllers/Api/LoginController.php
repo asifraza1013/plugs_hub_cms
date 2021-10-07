@@ -1,0 +1,154 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\UserApp;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+
+class LoginController extends Controller
+{
+    /**
+     * signup for customer
+     */
+    public function userSignUp(Request $request)
+    {
+        $rules = [
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email|unique:user_apps,email',
+            'phone' => 'required|string',
+            'password' => 'nullable|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $data = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'admin_approved' => true,
+            'status' => 3, // unverified by default
+        ];
+
+        $createUser = UserApp::updateOrCreate($data);
+        if($createUser){
+            // send OTP to user for verification
+            return response()->json([
+                'status' => true,
+                'code' => config('response.1004.code'),
+                'message' => config('response.1004.message'),
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'code' => config('response.1003.code'),
+            'message' => config('response.1003.message'),
+        ]);
+    }
+
+    /**
+     * customer login
+     */
+    public function customerEmailLogin(Request $request)
+    {
+        $rules = [
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $customer = UserApp::where('email', $request->email)->first();
+
+        if(is_null($customer)){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.1005.code'),
+                'message' => config('response.1005.message'),
+            ]);
+        }
+
+        if($customer->status == 3){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.1006.code'),
+                'message' => config('response.1006.message'),
+            ]);
+        }
+        if (Hash::check($request->password, $customer->password)) {
+            return response()->json([
+                'status' => false,
+                'code' => config('response.401.code'),
+                'message' => config('response.401.message'),
+                'error' => 'Unauthenticated.'
+            ], 401);
+        }
+        $tokenResult = $customer->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+        if ($request->remember_me)
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        $token->save();
+
+
+        return response()->json([
+            'id' => $customer->id,
+            'name' => $customer->first_name.' '.$customer->last_name,
+            'email' => $customer->email,
+            'image' => (is_null($customer->image)) ? null : asset('images/user/'.$customer->image),
+            'enable_notifications' => $customer->enable_notifications,
+            'role' => config('constants.appRole.'.$customer->app_rol),
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString()
+        ]);
+    }
+
+    /**
+     * update car detail
+     */
+    public function updateCarDetail(Request $request)
+    {
+        $rules = [
+            'car_brand' => 'required|string',
+            'car_modal' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $user = $request->user();
+        $user->car_brand = $request->car_brand;
+        $user->car_modal = $request->car_modal;
+        $user->save();
+        return response()->json([
+            'status' => true,
+            'code' => config('response.1007.code'),
+            'message' => config('response.1007.message'),
+        ]);
+    }
+}

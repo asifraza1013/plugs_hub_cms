@@ -21,6 +21,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.customer.list') }}">
+                        <i class="ni ni-delivery-fast text-pink"></i> {{ __('Customers') }}
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('roles.index') }}">
                         <i class="ni ni-single-02 text-blue"></i> {{ __('Roles') }}
                     </a>

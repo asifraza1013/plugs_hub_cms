@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles','RoleController');
     Route::resource('users','UserController');
     Route::resource('products','ProductController');
+    Route::get('customer','CustomerController@index')->name('admin.customer.list');
+    Route::delete('change_status/{id}','CustomerController@destroy')->name('admin.customer.change.status');
 });
 
-Route::get('/home', 'HomeController@index')->name('home');

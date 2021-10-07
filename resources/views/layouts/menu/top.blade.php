@@ -1,7 +1,7 @@
 <nav id="navbar-main" class="navbar navbar-light navbar-expand-lg fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand mr-lg-5" href="/">
-        <img src="{{ config('global.site_logo') }}">
+        <img src="{{ asset('images/logo.png') }}">
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,7 @@
           <div class="row">
             <div class="col-6 collapse-brand">
               <a href="#">
-                <img src="{{ config('global.site_logo') }}">
+                <img src="{{ asset('images/logo.png') }}">
               </a>
             </div>
             <div class="col-6 collapse-close">
