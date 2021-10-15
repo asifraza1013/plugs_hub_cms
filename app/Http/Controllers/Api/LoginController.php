@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DeviceToken;
 use App\Http\Controllers\Controller;
 use App\UserApp;
 use Carbon\Carbon;
@@ -74,6 +75,7 @@ class LoginController extends Controller
         $rules = [
             'email' => 'required|email',
             'password' => 'required|string',
+            'device_token' => 'required|string',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -114,6 +116,17 @@ class LoginController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
 
+        // store deive token
+        $device_token = DeviceToken::updateOrCreate(
+            [
+                'user_apps_id' => $customer->id,
+                'device_token' => $request->device_token,
+            ],
+            [
+                'user_apps_id' => $customer->id,
+                'device_token' => $request->device_token
+            ]
+        );
 
         return response()->json([
             'id' => $customer->id,
