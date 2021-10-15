@@ -30,5 +30,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('products','ProductController');
     Route::get('customer','CustomerController@index')->name('admin.customer.list');
     Route::delete('change_status/{id}','CustomerController@destroy')->name('admin.customer.change.status');
+
+    Route::get('vendors','ManagerServiceProviderController@vendorList')->name('admin.vendors.list');
+    Route::get('vendor-show/{id}','ManagerServiceProviderController@vendorDetail')->name('admin.vendors.detail');
+    Route::get('approve/{id}','ManagerServiceProviderController@approve')->name('admin.vendor.approve');
 });
 

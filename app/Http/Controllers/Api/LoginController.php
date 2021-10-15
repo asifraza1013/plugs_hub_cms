@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\UserApp;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
@@ -22,8 +24,9 @@ class LoginController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|email|unique:user_apps,email',
-            'phone' => 'required|string',
+            'phone' => 'required|string|unique:user_apps,phone',
             'password' => 'nullable|string',
+            'role' => 'required|in:1,2',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -39,13 +42,16 @@ class LoginController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'admin_approved' => true,
+            'admin_approved' => ($request->role == 1) ? true : false,
+            'app_role' => $request->role,
             'status' => 3, // unverified by default
         ];
 
         $createUser = UserApp::updateOrCreate($data);
         if($createUser){
-            // send OTP to user for verification
+           /**
+            * TODO send OTP to user for verification
+            */
             return response()->json([
                 'status' => true,
                 'code' => config('response.1004.code'),
@@ -87,13 +93,13 @@ class LoginController extends Controller
             ]);
         }
 
-        if($customer->status == 3){
-            return response()->json([
-                'status' => false,
-                'code' => config('response.1006.code'),
-                'message' => config('response.1006.message'),
-            ]);
-        }
+        // if($customer->status == 3){
+        //     return response()->json([
+        //         'status' => false,
+        //         'code' => config('response.1006.code'),
+        //         'message' => config('response.1006.message'),
+        //     ]);
+        // }
         if (Hash::check($request->password, $customer->password)) {
             return response()->json([
                 'status' => false,
@@ -149,6 +155,41 @@ class LoginController extends Controller
             'status' => true,
             'code' => config('response.1007.code'),
             'message' => config('response.1007.message'),
+        ]);
+    }
+
+    /**
+     * update profile image
+     */
+    public function updateProfileImage(Request $request)
+    {
+        $rules = [
+            'image' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $user = $request->user();
+
+        $image = $request->image;  // your base64 encoded
+        $image = str_replace('data:image/png;base64,', '', $image);
+        $image = str_replace(' ', '+', $image);
+        $imageName = str_random(10).'.'.'png';
+        if($user->image){
+            File::delete(public_path('users/'.$user->image));
+        }
+        File::put(public_path('users/'.$imageName), base64_decode($image));
+        $user->image = $imageName;
+        $user->save();
+        return response()->json([
+            'status' => true,
+            'code' => config('response.1008.code'),
+            'message' => config('response.1008.message'),
         ]);
     }
 }

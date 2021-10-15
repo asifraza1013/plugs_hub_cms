@@ -14,6 +14,10 @@ return [
 	1006 => ['code' => 1006, 'message' => 'Your account it not verified yet. verify first.'],
 
 	1007 => ['code' => 1007, 'message' => 'User vehical detail update successfull'],
+
+	1008 => ['code' => 1008, 'message' => 'User Profile image updated successfully.'],
+
+	1010 => ['code' => 1010, 'message' => 'Vendor Detail updated successfully.'],
 ];
 
 ?>

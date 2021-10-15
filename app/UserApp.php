@@ -11,7 +11,7 @@ class UserApp extends Authenticatable
     use Notifiable, HasApiTokens;
 
     protected $guarded=['id'];
-
+    public $timestamps = true;
     protected $fillable = [
         'google_id',
         'apple_id',

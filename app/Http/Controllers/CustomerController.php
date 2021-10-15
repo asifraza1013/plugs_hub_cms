@@ -13,13 +13,13 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    function __construct()
-    {
-         $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index','store']]);
-         $this->middleware('permission:user-create', ['only' => ['create','store']]);
-         $this->middleware('permission:user-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:user-delete', ['only' => ['destroy']]);
-    }
+    // function __construct()
+    // {
+    //      $this->middleware('permission:cusotmer-list|cusotmer-create|cusotmer-edit|cusotmer-delete', ['only' => ['index','store']]);
+    //      $this->middleware('permission:cusotmer-create', ['only' => ['create','store']]);
+    //      $this->middleware('permission:cusotmer-edit', ['only' => ['edit','update']]);
+    //      $this->middleware('permission:cusotmer-delete', ['only' => ['destroy']]);
+    // }
 
     public function index(Request $request)
     {
@@ -31,11 +31,14 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
-        $customer = UserApp::find($id)->first();
+        $customer = UserApp::where('id', $id)->first();
         if(is_null($customer)){
             return redirect()->back()->with('error', 'User Not found. Please try with correct data');
         }
 
+        if($customer->status == 3){
+            return redirect()->back()->with('error', 'Unverified user can\'t be change');
+        }
         if($customer->status == 1){
             $customer->status = 2;
         }else{

@@ -26,6 +26,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.vendors.list') }}">
+                        <i class="fa fa-users text-pink"></i> {{ __('Vendors') }}
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('roles.index') }}">
                         <i class="ni ni-single-02 text-blue"></i> {{ __('Roles') }}
                     </a>

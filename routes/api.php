@@ -15,11 +15,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+Route::post('/signup', 'Api\LoginController@userSignUp');
 Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
     Route::post('/login', 'LoginController@customerEmailLogin');
-    Route::post('/signup', 'LoginController@userSignUp');
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/update_vehicle_detail', 'LoginController@updateCarDetail');
+        Route::post('/update_profile_image', 'LoginController@updateProfileImage');
+    });
+});
+
+Route::group(['prefix' => 'vendor', 'namespace' => 'Api'], function () {
+    Route::post('/login', 'LoginController@customerEmailLogin');
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('/add_detail', 'ServiceProviderController@providorDetail');
     });
 });
