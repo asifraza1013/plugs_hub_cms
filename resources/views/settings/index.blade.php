@@ -13,7 +13,7 @@
                             <h3 class="mb-0">{{ __('Settings Management') }}</h3>
                         </div>
                         <div class="col-4 text-right">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -27,66 +27,25 @@
                         </button>
                     </div>
                     @endif
-                        <form method="post" action="{{ route('settings.update', $settings->id) }}" autocomplete="off" enctype="multipart/form-data">
-                            @csrf
-                            @method('put')
-                            <div class="nav-wrapper">
-                                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-image mr-2"></i>{{ __ ('Images') }}</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-bullet-list-67 mr-2"></i>{{ __ ('Site Info') }}</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-ui-04 mr-2"></i>{{ __ ('Company Detail') }}</a>
-                                    </li>
-                                    
-
-                                </ul>
+                    <form method="post" action="{{ route('settings.update', $settings->id) }}" autocomplete="off"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
+                        <br />
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel"
+                                aria-labelledby="tabs-icons-text-2-tab">
                             </div>
-                            <br/>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                        <div class="row">
-                                            <?php
-                                                $images=[
-                                                    ['name'=>'site_logo','label'=>__('Site Logo'),'value'=>config('global.site_logo'),'style'=>'width: 200px;'],
-                                                    ['name'=>'search','label'=>__('Search Cover'),'value'=>config('global.search'),'style'=>'width: 200px;'],
-                                                    ['name'=>'restorant_details_image','label'=>__('Restaurant Default Image'),'value'=>config('global.restorant_details_image'),'style'=>'width: 200px;'],
-                                                    ['name'=>'restorant_details_cover_image','label'=>__('Restaurant Details Cover Image'),'value'=>config('global.restorant_details_cover_image'),'style'=>'width: 200px;']
-                                                ]
-                                            ?>
-                                            @foreach ($images as $image)
-                                                <div class="col-md-4">
-                                                    @include('partials.images',$image)
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-                                        @include('partials.input',['id'=>'site_name','name'=>'Site Name','placeholder'=>'Site Name here ...','value'=>$settings->site_name, 'required'=>true])
-                                        @include('partials.input',['id'=>'site_description','name'=>'Site Description','placeholder'=>'Site Description here ...','value'=>$settings->description, 'required'=>true])
-                                        @include('partials.input',['id'=>'header_title','name'=>'Header Title','placeholder'=>'Header Title here ...','value'=>$settings->header_title, 'required'=>true])
-                                        @include('partials.input',['id'=>'header_subtitle','name'=>'Header Subtitle','placeholder'=>'Header Subtitle here ...','value'=>$settings->header_subtitle, 'required'=>true])
-                                        <br/>
-                                    </div>
-                                    <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-                                        {{-- <h6 class="heading-small text-muted mb-4">{{ __('Company Address') }}</h6> --}}
-                                        @include('partials.input',['id'=>'company_name','name'=>'Compnay Name','placeholder'=>'Compnay Name','value'=>$settings->company_name, 'required'=>true])
-
-                                        @include('partials.input',['id'=>'company_address','name'=>'Compnay Address','placeholder'=>'Compnay Address','value'=>$settings->company_address, 'required'=>true])
-
-                                        @include('partials.input',['id'=>'registration_no','name'=>'Company Hse Reg No','placeholder'=>'Company House Registration Number','value'=>$settings->registration_no, 'required'=>true])
-
-                                        @include('partials.input',['id'=>'company_phone','name'=>'Compnay Phone','placeholder'=>'Compnay Phone','value'=>$settings->company_phone, 'required'=>true])
-
-                                        @include('partials.input',['id'=>'company_email','name'=>'Compnay Email','placeholder'=>'Compnay Email','value'=>$settings->company_email, 'required'=>true])
-
-                                        @include('partials.input',['id'=>'admin_email','name'=>'Admin Email','placeholder'=>'Admin Email','value'=>$settings->admin_email, 'required'=>true])
-                                    </div>
-
-                                    
+                            <div class="tab-pane fade active show" id="tabs-icons-text-1" role="tabpanel"
+                                aria-labelledby="tabs-icons-text-1-tab">
+                                @include('partials.input',['id'=>'admin_commission','name'=>'Admin
+                                Commission','placeholder'=>'Admin Commission ...','value'=>$settings->admin_commission,
+                                'required'=>true])
+                                @include('partials.input',['id'=>'google_map_key','name'=>'Google Map API
+                                Key','placeholder'=>'Google MAP API key ...','value'=>$settings->google_map_key,
+                                'required'=>true])
+                                <br />
+                            </div>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
@@ -97,6 +56,6 @@
         </div>
     </div>
 </div>
-<br/><br/>
+<br /><br />
 </div>
 @endsection

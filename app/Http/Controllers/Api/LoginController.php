@@ -95,13 +95,21 @@ class LoginController extends Controller
             ]);
         }
 
-        // if($customer->status == 3){
-        //     return response()->json([
-        //         'status' => false,
-        //         'code' => config('response.1006.code'),
-        //         'message' => config('response.1006.message'),
-        //     ]);
-        // }
+        if($customer->status == 3){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.1006.code'),
+                'message' => config('response.1006.message'),
+            ]);
+        }
+
+        if($customer->status == 2){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.1006.code'),
+                'message' => config('response.1006.message'),
+            ]);
+        }
         if (Hash::check($request->password, $customer->password)) {
             return response()->json([
                 'status' => false,

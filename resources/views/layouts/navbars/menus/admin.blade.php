@@ -26,6 +26,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('chargerbox.index') }}">
+                        <i class="fa fa-plug text-danger"></i> {{ __('Charger Info') }}
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.vendors.list') }}">
                         <i class="fa fa-users text-pink"></i> {{ __('Vendors') }}
                     </a>
@@ -33,6 +38,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('roles.index') }}">
                         <i class="ni ni-single-02 text-blue"></i> {{ __('Roles') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('settings.index') }}">
+                        <i class="ni ni-settings text-black"></i> {{ __('Settings') }}
                     </a>
                 </li>
                 {{-- <li class="nav-item">

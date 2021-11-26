@@ -12,12 +12,20 @@ return [
 
 	1005 => ['code' => 1005, 'message' => 'No Record found. Please try with correct data. '],
 	1006 => ['code' => 1006, 'message' => 'Your account it not verified yet. verify first.'],
+    1015 => ['code' => 1015, 'message' => 'Opps! your account is terminated. Please contact admin.'],
 
 	1007 => ['code' => 1007, 'message' => 'User vehical detail update successfull'],
 
 	1008 => ['code' => 1008, 'message' => 'User Profile image updated successfully.'],
 
 	1010 => ['code' => 1010, 'message' => 'Vendor Detail updated successfully.'],
+
+    1011 => ['code' => 1011, 'message' => 'Get service provider with radius success.'],
+    1012 => ['code' => 1012, 'message' => 'Get service provider with radius failed. No record found.'],
+    1013 => ['code' => 1013, 'message' => 'Opps! somthing is wrong with location detail. Please try again with correct data.'],
+    1014 => ['code' => 1014, 'message' => 'Vendor location detail success.'],
+
+    1017 => ['code' => 1017, 'message' => 'Get charger info success'],
 ];
 
 ?>

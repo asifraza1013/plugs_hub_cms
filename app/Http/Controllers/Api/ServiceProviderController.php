@@ -150,7 +150,10 @@ class ServiceProviderController extends Controller
 
         Log::info("user detail -- ".json_encode($vendorData).'  user_id'.$user->id);
 
-        ServiceProvider::create($vendorData);
+        ServiceProvider::updateOrCreate(
+            ['user_apps_id' => $user->id],
+            $vendorData
+        );
         return response()->json([
             'status' => true,
             'code' => config('response.1010.code'),

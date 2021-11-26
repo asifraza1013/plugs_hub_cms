@@ -18,10 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('/signup', 'Api\LoginController@userSignUp');
 Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
     Route::post('/login', 'LoginController@customerEmailLogin');
+    Route::post('/charger_info', 'ChargerInfoManagementController@chargerInfo');
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/update_vehicle_detail', 'LoginController@updateCarDetail');
         Route::post('/update_profile_image', 'LoginController@updateProfileImage');
+        Route::post('/vendor_with_radius', 'BookingController@vendorListUsingRadius');
+        Route::post('/vendor_radius_detail', 'BookingController@vendorLocationDetailWithDistanceTime');
     });
 });
 

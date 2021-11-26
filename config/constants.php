@@ -10,6 +10,11 @@ return [
         2 => 'Terminated',
         3 => 'Unverified',
     ],
+    'charger_type' => [
+        1 => 'Charger Box',
+        2 => 'Charging Plug Type',
+        3 => 'Car Brand',
+    ],
     'country_list' => [
         1 => 'United Arab Emirates',
         2 => 'Oman',
@@ -48,6 +53,16 @@ return [
         1 => '120V/220V Phase 1',
         2 => '220V Phase 3',
         3 => '400V Phase 3',
+    ],
+    'request_status' => [
+        1 => 'Pending',
+        2 => 'Approved',
+        3 => 'Completed',
+    ],
+    'charger_info' => [
+        1 => 'Charger Box',
+        2 => 'Charger Plug type',
+        3 => 'Car Brand',
     ],
 ];
 
