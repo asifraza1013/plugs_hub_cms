@@ -154,7 +154,7 @@ class LoginController extends Controller
             ]
         );
 
-        return response()->json([
+        $data = [
             'id' => $customer->id,
             'name' => $customer->first_name.' '.$customer->last_name,
             'email' => $customer->email,
@@ -166,6 +166,12 @@ class LoginController extends Controller
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()
+        ];
+        return response()->json([
+            'status' => true,
+            'user' => $data,
+            'code' => config('response.1002.code'),
+            'message' => config('response.1002.message'),
         ]);
     }
 
