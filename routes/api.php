@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/signup', 'Api\LoginController@userSignUp');
+Route::post('/send_otp', 'Api\LoginController@sendOtp');
+Route::post('/verif_otp', 'Api\LoginController@verifyOtp');
 Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
     Route::post('/login', 'LoginController@customerEmailLogin');
     Route::post('/charger_info', 'ChargerInfoManagementController@chargerInfo');

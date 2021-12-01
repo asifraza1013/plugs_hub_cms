@@ -27,7 +27,6 @@ class ServiceProviderController extends Controller
             'post_code' => 'required|string',
 
             'charger_box' => 'required|array',
-            'charger_box' => 'required|array',
             'charger_plug_type' => 'required|array',
             'charger_level' => 'required|array',
             'charger_capacity' => 'required|array',
@@ -35,7 +34,7 @@ class ServiceProviderController extends Controller
             'charger_img' => 'required|array',
 
             'id_type' => 'required|string|in:NID,Passport',
-            'passport_img' => 'required|string',
+            // 'passport_img' => 'required|string',
 
             'bill_img' => 'required|string',
             'parking_img' => 'required|string',

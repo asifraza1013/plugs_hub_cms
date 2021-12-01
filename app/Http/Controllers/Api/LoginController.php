@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\DeviceToken;
 use App\Http\Controllers\Controller;
+use App\Notifications\SendOtpNotification;
 use App\UserApp;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -49,12 +50,15 @@ class LoginController extends Controller
         ];
 
         $createUser = UserApp::updateOrCreate($data);
+
+        $user = UserApp::latest()->first();
         if($createUser){
            /**
             * TODO send OTP to user for verification
             */
             return response()->json([
                 'status' => true,
+                'user' => $user,
                 'code' => config('response.1004.code'),
                 'message' => config('response.1004.message'),
             ]);
@@ -85,7 +89,8 @@ class LoginController extends Controller
             return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
         }
 
-        $customer = UserApp::where('email', $request->email)->first();
+        $customer = UserApp::where('email', $request->email)
+        ->first();
 
         if(is_null($customer)){
             return response()->json([
@@ -211,6 +216,79 @@ class LoginController extends Controller
             'status' => true,
             'code' => config('response.1008.code'),
             'message' => config('response.1008.message'),
+        ]);
+    }
+
+    /**
+     * send OTP
+     */
+    public function sendOtp(Request $request)
+    {
+        $rules = [
+            'user_id' => 'required|numeric',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+       $otp = rand(0000, 9999);
+       Log::info("OTP user ".$request->user_id. ' OTP '.$otp);
+
+       $userapp = UserApp::where('id', $request->user_id)->first();
+
+       $userapp->otp = $otp;
+       $userapp->update();
+
+       Log::info("user detial ".json_encode($userapp));
+       // send email notification
+       $userapp->notify(new SendOtpNotification($userapp, $otp));
+
+        return response()->json([
+            'status' => true,
+            'code' => config('response.1018.code'),
+            'message' => config('response.1018.message'),
+        ]);
+    }
+
+    /**
+     * verify OTP
+     */
+    public function verifyOtp(Request $request)
+    {
+        $rules = [
+            'user_id' => 'required|numeric',
+            'otp' => 'required|numeric',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $userapp = UserApp::where('id', $request->user_id)->first();
+
+        if(($userapp->otp == null) || ($request->otp != $userapp->otp)){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.1019.code'),
+                'message' => config('response.1019.message'),
+            ]);
+        }
+
+        $userapp->otp = null;
+        $userapp->status = 1;
+        $userapp->update();
+
+        return response()->json([
+            'status' => true,
+            'code' => config('response.1020.code'),
+            'message' => config('response.1020.message'),
         ]);
     }
 }
