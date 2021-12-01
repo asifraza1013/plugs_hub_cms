@@ -259,6 +259,7 @@ class LoginController extends Controller
      */
     public function verifyOtp(Request $request)
     {
+        Log::info("verifyOtp req".json_encode($request->all()));
         $rules = [
             'user_id' => 'required|numeric',
             'otp' => 'required|numeric',
@@ -272,8 +273,8 @@ class LoginController extends Controller
         }
 
         $userapp = UserApp::where('id', $request->user_id)->first();
-
-        if(($userapp->otp == null) || ($request->otp != $userapp->otp)){
+        Log::info("userapp OTP ".json_encode($userapp));
+        if($userapp->otp == null || $request->otp != $userapp->otp){
             return response()->json([
                 'status' => false,
                 'code' => config('response.1019.code'),
