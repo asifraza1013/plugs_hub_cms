@@ -26,7 +26,7 @@ class LoginController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|email',
-            'phone' => 'required|string|unique:user_apps,phone',
+            'phone' => 'required|string',
             'password' => 'nullable|string',
             'role' => 'required|in:1,2',
         ];
