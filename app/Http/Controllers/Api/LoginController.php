@@ -25,7 +25,7 @@ class LoginController extends Controller
         $rules = [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|email|unique:user_apps,email',
+            'email' => 'required|email',
             'phone' => 'required|string|unique:user_apps,phone',
             'password' => 'nullable|string',
             'role' => 'required|in:1,2',
