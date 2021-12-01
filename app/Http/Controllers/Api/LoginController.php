@@ -49,7 +49,20 @@ class LoginController extends Controller
             'status' => 3, // unverified by default
         ];
 
-        $createUser = UserApp::updateOrCreate($data);
+        $createUser = UserApp::updateOrCreate([
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ],
+        [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'admin_approved' => ($request->role == 1) ? true : false,
+            'app_role' => $request->role,
+            'status' => 3, // unverified by default
+        ]);
 
         $user = UserApp::latest()->first();
         if($createUser){
