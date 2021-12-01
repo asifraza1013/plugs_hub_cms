@@ -128,7 +128,7 @@ class LoginController extends Controller
                 'message' => config('response.1006.message'),
             ]);
         }
-        if (Hash::check($request->password, $customer->password)) {
+        if (!Hash::check($request->password, $customer->password)) {
             return response()->json([
                 'status' => false,
                 'code' => config('response.401.code'),
