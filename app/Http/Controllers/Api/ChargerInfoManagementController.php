@@ -36,4 +36,21 @@ class ChargerInfoManagementController extends Controller
             'message' => config('response.1017.message'),
         ]);
     }
+
+    /**
+     * get car brand list
+     */
+    public function getCarBrandList(Request $request)
+    {
+        $carBrand = ChargerBox::where('type', 3)
+        ->where('status', 'active')
+        ->pluck('name', 'id');
+
+        return response()->json([
+            'status' => true,
+            'data' => $carBrand,
+            'code' => config('response.1021.code'),
+            'message' => config('response.1021.message'),
+        ]);
+    }
 }

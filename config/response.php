@@ -31,6 +31,7 @@ return [
     1018 => ['code' => 1018, 'message' => 'OTP sent successfully'],
     1019 => ['code' => 1019, 'message' => 'Opps!. OTP mismatched. Please try again with correct data'],
     1020 => ['code' => 1020, 'message' => 'Otp matched. You are verified now.'],
+    1021 => ['code' => 1021, 'message' => 'Get car brand info success'],
 ];
 
 ?>
