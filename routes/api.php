@@ -21,7 +21,7 @@ Route::post('/verif_otp', 'Api\LoginController@verifyOtp');
 Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
     Route::post('/login', 'LoginController@customerEmailLogin');
     Route::post('/charger_info', 'ChargerInfoManagementController@chargerInfo');
-    Route::post('/car_brand_list', 'ChargerInfoManagementController@chargerInfo');
+    Route::post('/car_brand_list', 'ChargerInfoManagementController@getCarBrandList');
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/update_vehicle_detail', 'LoginController@updateCarDetail');
