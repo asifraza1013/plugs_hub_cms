@@ -15,10 +15,10 @@ class ChargerInfoManagementController extends Controller
     {
         $chargerBox = ChargerBox::where('type', 1)
         ->where('status', 'active')
-        ->pluck('name', 'id');
+        ->get();
         $chargerType = ChargerBox::where('type', 2)
         ->where('status', 'active')
-        ->pluck('name', 'id');
+        ->get();
         $level = config('constants.charger_level');
         $capacity = config('constants.charger_capacity');
         $voltage = config('constants.charger_voltage');
@@ -44,7 +44,7 @@ class ChargerInfoManagementController extends Controller
     {
         $carBrand = ChargerBox::where('type', 3)
         ->where('status', 'active')
-        ->pluck('name', 'id');
+        ->get();
 
         return response()->json([
             'status' => true,
