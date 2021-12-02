@@ -13,12 +13,32 @@ class ChargerInfoManagementController extends Controller
      */
     public function chargerInfo(Request $request)
     {
-        $chargerBox = ChargerBox::where('type', 1)
-        ->where('status', 'active')
+        $allData = ChargerBox::where('status', 'active')
+        ->where('type', '!=', 3)
         ->get();
-        $chargerType = ChargerBox::where('type', 2)
-        ->where('status', 'active')
-        ->get();
+        // $chargerType = ChargerBox::where('type', 2)
+        // ->where('status', 'active')
+        // ->get();
+        $chargerBox = [];
+        $chargerType = [];
+        foreach($allData as $item){
+            if($item->type = 2){
+                $value = (object)[
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'image' => asset('uploads/'.$item->image.'_thumbnail'.'.jpg'),
+                ];
+                array_push($chargerType, $value);
+            }
+            if($item->type = 1){
+                $value = (object)[
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'image' => asset('uploads/'.$item->image.'_thumbnail'.'.jpg'),
+                ];
+                array_push($chargerBox, $value);
+            }
+        }
         $level = config('constants.charger_level');
         $capacity = config('constants.charger_capacity');
         $voltage = config('constants.charger_voltage');
@@ -45,10 +65,18 @@ class ChargerInfoManagementController extends Controller
         $carBrand = ChargerBox::where('type', 3)
         ->where('status', 'active')
         ->get();
-
+        $data = [];
+        foreach($carBrand as $item){
+            $value = (object)[
+                'id' => $item->id,
+                'name' => $item->name,
+                'image' => asset('uploads/'.$item->image.'_thumbnail'.'.jpg'),
+            ];
+            array_push($data, $value);
+        }
         return response()->json([
             'status' => true,
-            'data' => $carBrand,
+            'data' => $data,
             'code' => config('response.1021.code'),
             'message' => config('response.1021.message'),
         ]);
