@@ -18,8 +18,8 @@ class BookingController extends Controller
     {
         $rules = [
             'distance' => 'nullable|numeric',
-            'lat' => 'required|string',
-            'lng' => 'required|string',
+            'lat' => 'required',
+            'lng' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -70,8 +70,8 @@ class BookingController extends Controller
     {
         $rules = [
             'vendor_id' => 'required|numeric',
-            'lat' => 'required|string',
-            'lng' => 'required|string',
+            'lat' => 'required',
+            'lng' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
