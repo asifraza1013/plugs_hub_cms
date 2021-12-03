@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class ServiceProvider extends Model
 {
+    protected $casts = [
+        'lat' => 'float',
+        'lng' => 'float',
+    ];
+
     protected $fillable = [
         'user_apps_id',
         'vendor_id',

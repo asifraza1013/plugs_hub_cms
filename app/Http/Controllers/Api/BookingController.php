@@ -35,8 +35,9 @@ class BookingController extends Controller
         $lng = $request->lng;
         Log::info("distance --".$distance);
 
-       $query =  DB::table("service_providers")
-        ->select("user_apps_id AS id", DB::raw("6371 * acos(cos(radians(" . $lat . "))
+    //    $query =  DB::table("service_providers")
+       $query =  ServiceProvider::
+        select("user_apps_id AS id", DB::raw("6371 * acos(cos(radians(" . $lat . "))
         * cos(radians(lat))
         * cos(radians(lng) - radians(" . $lng . "))
         + sin(radians(" .$lat. "))
