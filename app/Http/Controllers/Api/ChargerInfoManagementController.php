@@ -39,9 +39,9 @@ class ChargerInfoManagementController extends Controller
                 array_push($chargerBox, $value);
             }
         }
-        $level = config('constants.charger_level');
-        $capacity = config('constants.charger_capacity');
-        $voltage = config('constants.charger_voltage');
+        $level = config('constants.charger_level_obj');
+        $capacity = config('constants.charger_capacity_obj');
+        $voltage = config('constants.charger_voltage_obj');
 
         return response()->json([
             'status' => true,

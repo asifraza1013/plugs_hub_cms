@@ -43,16 +43,60 @@ return [
         1 => 'Level 2',
         2 => 'Level 3',
     ],
+    'charger_level_obj' => [
+        (object) [
+            'id' => 1,
+            'name' => 'Level 2',
+        ],
+        (object) [
+            'id' => 2,
+            'name' => 'Level 3',
+        ],
+    ],
+
     'charger_capacity' => [
         1 => '7 Kw - 10 Kw',
         2 => '11 Kw - 22 Kw',
         3 => '23 Kw - 50 Kw',
         4 => '51 Kw - 200 Kw',
     ],
+
+    'charger_capacity_obj' => [
+        (object)[
+            'id' => 1,
+            'name' => '7 Kw - 10 Kw',
+        ],
+        (object)[
+            'id' => 2,
+            'name' => '11 Kw - 22 Kw',
+        ],
+        (object)[
+            'id' => 3,
+            'name' => '23 Kw - 50 Kw',
+        ],
+        (object)[
+            'id' => 4,
+            'name' => '51 Kw - 200 Kw',
+        ],
+    ],
     'charger_voltage' => [
         1 => '120V/220V Phase 1',
         2 => '220V Phase 3',
         3 => '400V Phase 3',
+    ],
+    'charger_voltage_obj' => [
+        (object)[
+            'id' => 1,
+            'name' => '120V/220V Phase 1',
+        ],
+        (object)[
+            'id' => 2,
+            'name' => '220V Phase 3',
+        ],
+        (object)[
+            'id' => 3,
+            'name' => '400V Phase 3',
+        ],
     ],
     'request_status' => [
         1 => 'Pending',
