@@ -63,15 +63,15 @@ class LoginController extends Controller
             'app_role' => $request->role,
             'status' => 3, // unverified by default
         ]);
-
-        $user = UserApp::latest()->first();
+        // return response()->json($createUser);
+        // $user = UserApp::latest()->first();
         if($createUser){
            /**
             * TODO send OTP to user for verification
             */
             return response()->json([
                 'status' => true,
-                'user' => $user,
+                'user' => $createUser,
                 'code' => config('response.1004.code'),
                 'message' => config('response.1004.message'),
             ]);
