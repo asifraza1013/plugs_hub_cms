@@ -17,7 +17,7 @@ class BookingController extends Controller
     public function vendorListUsingRadius(Request $request)
     {
         $rules = [
-            'distance' => 'nullable|numeric',
+            'distance' => 'nullable',
             'lat' => 'required',
             'lng' => 'required',
         ];
@@ -69,7 +69,7 @@ class BookingController extends Controller
     public function vendorLocationDetailWithDistanceTime(Request $request)
     {
         $rules = [
-            'vendor_id' => 'required|numeric',
+            'vendor_id' => 'required',
             'lat' => 'required',
             'lng' => 'required',
         ];
