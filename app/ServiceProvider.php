@@ -30,7 +30,7 @@ class ServiceProvider extends Model
 
     public function user()
     {
-        return $this->hasOne('App\UserAPP', 'id', 'user_apps_id');
+        return $this->hasOne('App\UserApp', 'id', 'user_apps_id');
     }
     public function chargerInfo()
     {
