@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\ChargerBox;
+use App\ChargerInfo;
 use App\Http\Controllers\Controller;
 use App\ServiceProvider;
 use Illuminate\Http\Request;
@@ -84,6 +86,7 @@ class BookingController extends Controller
         $vendor = ServiceProvider::where('user_apps_id', $request->vendor_id)
         ->select('user_apps_id AS id', 'vendor_id', 'country', 'city', 'address', 'street', 'post_code', 'lat', 'lng', 'parking_img')
         ->first();
+        Log::info("detail vendor ".json_encode($vendor));
         if($vendor){
             $response = calculateDistance($request->lat, $request->lng, $vendor->lat, $vendor->lng);
             Log::info("matric res - ".json_encode($response).' vendor '.$request->vendor_id);
@@ -93,9 +96,24 @@ class BookingController extends Controller
                 $vendor->distance_with_unit = $response['distance'];
                 $vendor->duration = $response['durations'];
                 $vendor->parking_img = asset('uploads/'.$vendor->parking_img);
+
+                $allData = ChargerBox::where('status', 'active')
+                ->where('type', 2)
+                ->get();
+
+                $chargerType = [];
+                foreach($allData as $item){
+                    $value = (object)[
+                        'id' => $item->id,
+                        'name' => $item->name,
+                        'image' => asset('uploads/'.$item->image.'_thumbnail'.'.jpg'),
+                    ];
+                    array_push($chargerType, $value);
+                }
                 return response()->json([
                     'status' => true,
                     'data' => $vendor,
+                    'plug_type' => $chargerType,
                     'code' => config('response.1014.code'),
                     'message' => config('response.1014.message'),
                 ]);
