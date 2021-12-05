@@ -28,6 +28,8 @@ Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
         Route::post('/update_profile_image', 'LoginController@updateProfileImage');
         Route::post('/vendor_with_radius', 'BookingController@vendorListUsingRadius');
         Route::post('/vendor_radius_detail', 'BookingController@vendorLocationDetailWithDistanceTime');
+
+        Route::post('/create_booking_request', 'OrderManagementController@requestChargerBooking');
     });
 });
 
@@ -37,4 +39,12 @@ Route::group(['prefix' => 'vendor', 'namespace' => 'Api'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/add_detail', 'ServiceProviderController@providorDetail');
     });
+});
+
+
+// common APIs
+Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
+    Route::post('/order_list', 'OrderManagementController@orderList');
+    Route::post('/approve_charger_req', 'OrderManagementController@approveChargerReq');
+    Route::post('/cencel_charger_req', 'OrderManagementController@cancelChargerReq');
 });

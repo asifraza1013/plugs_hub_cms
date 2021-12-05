@@ -12,4 +12,6 @@ class OrderHasStatus extends Model
         'status',
         'comment',
     ];
+
+    protected $table = 'order_has_status';
 }

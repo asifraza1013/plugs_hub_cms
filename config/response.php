@@ -32,6 +32,19 @@ return [
     1019 => ['code' => 1019, 'message' => 'Opps!. OTP mismatched. Please try again with correct data'],
     1020 => ['code' => 1020, 'message' => 'Otp matched. You are verified now.'],
     1021 => ['code' => 1021, 'message' => 'Get car brand info success'],
+
+
+    1022 => ['code' => 1022, 'message' => 'Request to book charger sent successfully'],
+
+    1023 => ['code' => 1023, 'message' => 'Get order list success'],
+    1024 => ['code' => 1024, 'message' => 'Get order list failed. No record found'],
+
+    1025 => ['code' => 1025, 'message' => 'Approve request failed. Pending order not found. Please try with correct data'],
+    1026 => ['code' => 1026, 'message' => 'Reuqest approved successfully.'],
+    1027 => ['code' => 1027, 'message' => 'Reuqest to cancel order success.'],
+
+    5000 => ['code' => 5000, 'message' => 'You account already exist. Please try login.'],
+
 ];
 
 ?>

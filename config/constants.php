@@ -108,6 +108,19 @@ return [
         2 => 'Charger Plug type',
         3 => 'Car Brand',
     ],
+    'per_mint_cost' => 15,
+    'payment_method' => 'Strip',
+    'payment_status' => [
+        'Unpaid' => 'Unpaid',
+        'Paid' => 'Paid',
+        'Pending' => 'Pending',
+    ],
+    'request_status' => [
+        1 => 'Pending',
+        2 => 'Accepted',
+        3 => 'Cancelled',
+        4 => 'Completed',
+    ],
 ];
 
 ?>

@@ -38,33 +38,51 @@ class LoginController extends Controller
             return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
         }
 
-        $data = [
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'admin_approved' => ($request->role == 1) ? true : false,
-            'app_role' => $request->role,
-            'status' => 3, // unverified by default
-        ];
+        $exist = UserApp::where('email', $request->email)->orWhere('phone', $request->phone)->first();
+        if($exist){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.5000.code'),
+                'code' => config('response.5000.code'),
+            ]);
+        }
+        // $data = [
+        //     'first_name' => $request->first_name,
+        //     'last_name' => $request->last_name,
+        //     'email' => $request->email,
+        //     'phone' => $request->phone,
+        //     'password' => Hash::make($request->password),
+        //     'admin_approved' => ($request->role == 1) ? true : false,
+        //     'app_role' => $request->role,
+        //     'status' => 3, // unverified by default
+        // ];
 
-        $createUser = UserApp::updateOrCreate([
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ],
-        [
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'admin_approved' => ($request->role == 1) ? true : false,
-            'app_role' => $request->role,
-            'status' => 3, // unverified by default
-        ]);
-        // return response()->json($createUser);
-        // $user = UserApp::latest()->first();
+        // $createUser = UserApp::updateOrCreate([
+        //     'email' => $request->email,
+        //     'phone' => $request->phone,
+        // ],
+        // [
+        //     'first_name' => $request->first_name,
+        //     'last_name' => $request->last_name,
+        //     'email' => $request->email,
+        //     'phone' => $request->phone,
+        //     'password' => Hash::make($request->password),
+        //     'admin_approved' => ($request->role == 1) ? true : false,
+        //     'app_role' => $request->role,
+        //     'status' => 3, // unverified by default
+        // ]);
+
+        $createUser= new UserApp;
+        $createUser->first_name = $request->first_name;
+        $createUser->last_name = $request->last_name;
+        $createUser->email = $request->email;
+        $createUser->phone = $request->phone;
+        $createUser->password = Hash::make($request->password);
+        $createUser->admin_approved = ($request->role == 1) ? true : false;
+        $createUser->app_role = $request->role;
+        $createUser->status = 3; // unverified by default
+        $createUser->save();
+
         if($createUser){
            /**
             * TODO send OTP to user for verification

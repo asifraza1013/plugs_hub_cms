@@ -12,7 +12,7 @@ class StatusTableSeeder extends Seeder
      */
     public function run()
     {
-        $statuses=["Just created","Accepted by vendor","Arrive Confirm","Start Charging","Charging Complete"];
+        $statuses=["Just created","Accepted by vendor","Arrive Confirm","Start Charging","Charging Complete", 'Cancelled by vendor', 'Cancelled by customer'];
         foreach ( $statuses as $key => $status) {
             DB::table('statuses')->insert([
                 'name' => $status,

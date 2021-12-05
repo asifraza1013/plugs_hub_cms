@@ -1,5 +1,8 @@
 <?php
 
+use App\DeviceToken;
+use App\OrderHasStatus;
+use App\Status;
 use Illuminate\Support\Facades\Log;
 
 if (!function_exists('error_msg_serialize')) {
@@ -88,3 +91,131 @@ if (!function_exists('calculateDistance')) {
     }
 
 }
+
+/**
+ * get notification data
+ */
+
+if (!function_exists('getNotiData')) {
+    function getNotiData($status, $order, $is_driver = false)
+    {
+        if ($status == "just_created") {
+            //Created
+            $greeting = __('Request From Client');
+            $line = __('You Have Got a request from our client. Please check details. ');
+        }
+        if ($status == "accepted_by_vendor") {
+            //accpeted
+            $greeting = __('Booking Request Approved');
+            $line = __('Our service provider accept you charger booking request. You are good to go now.');
+        }
+        if ($status == "cancelled_by_customer") {
+            //customer cancel request
+            $greeting = __('Booking Request Cancelled');
+            $line = __('Customer cancel charger request.');
+        }
+        if ($status == "cancelled_by_vendor") {
+            //customer cancel request
+            $greeting = __('Booking Request Cancelled');
+            $line = __('Charger reuqets is cancelled by service provider.');
+        }
+
+        return ['title' => $greeting, 'body' => $line];
+    }
+}
+
+/**
+ * send notification
+ */
+
+if (!function_exists('sendNotification')) {
+    function sendNotification($status, $order, $is_vendor = false)
+    {
+        $message = getNotiData($status, $order, $is_vendor);
+        Log::info("message in helper--" . json_encode($message));
+
+        $orderId = $order->id;
+        $id = ($is_vendor) ?  $order->provider_id : $order->customer_id;
+        $device_tokens = DeviceToken::where('user_apps_id', $id)->pluck('device_token');
+        $SERVER_API_KEY = env('FCM_KEY');
+        $type = "basic";
+        $data = (object)[
+            'registration_ids' => $device_tokens,
+            'data' => (object)[
+                'body' => $message['body'],
+                'title' => $message['title'],
+                'type' => $type,
+                'id' => $id,
+                'status' => $status,
+                'role' => ($is_vendor) ? 'vendor' : 'customer',
+                'order_id' => $orderId,
+                'message' => $message['body'],
+            ],
+            'notification' => (object)[
+                'body' => $message['body'],
+                'title' => $message['title'],
+                'type' => $type,
+                'id' => $id,
+                'status' => $status,
+                'role' => ($is_vendor) ? 'vendor' : 'customer',
+                'order_id' => $orderId,
+                'message' => $message['body'],
+                'icon' => 'new',
+                'sound' => 'default',
+            ]
+        ];
+        Log::info("message in helper data total --" . json_encode($data));
+        $dataString = json_encode($data);
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        Log::info("notification response.-" . json_encode($response));
+        return $response;
+    }
+}
+
+/**
+ *  calculate admin commission
+ */
+if (!function_exists('calculateAdminCommission')) {
+    function calculateAdminCommission($total, $commissionPercent)
+    {
+        return ($total / 100) * $commissionPercent;
+    }
+}
+
+/**
+ *  Add order status
+ */
+if (!function_exists('createOrderHaseStatus')) {
+    function createOrderHaseStatus($statusAlias, $order)
+    {
+        $status = Status::where('alias', $statusAlias)->first();
+         // add status for this order
+
+        $orderstatus = new OrderHasStatus;
+        $orderstatus->order_id = $order->id;
+        $orderstatus->status_id = $status->id;
+        $orderstatus->user_apps_id = $order->customer_id;
+        $orderstatus->provider_id = $order->provider_id;
+        $orderstatus->save();
+        return $orderstatus;
+    }
+}
+
+

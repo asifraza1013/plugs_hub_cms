@@ -15,9 +15,19 @@ class CreateOrderHasStatusesTable extends Migration
     {
         Schema::create('order_has_statuses', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_apps_id')->index();
-            $table->integer('provider_id')->index();
-            $table->integer('status');
+
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')->references('id')->on('orders');
+
+            $table->unsignedBigInteger('user_apps_id');
+            // $table->foreign('user_apps_id')->references('id')->on('user_apps');
+
+            $table->unsignedBigInteger('provider_id');
+            // $table->foreign('provider_id')->references('id')->on('service_providers');
+
+            $table->unsignedBigInteger('status_id');
+            // $table->foreign('status_id')->references('id')->on('status');
+
             $table->string('comment')->nullable();
             $table->timestamps();
         });

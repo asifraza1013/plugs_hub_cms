@@ -25,6 +25,11 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
+
+    // live orders
+    Route::get('liveapi', 'OrderController@liveapi');
+    Route::get('live', 'OrderController@live');
+
     Route::resource('roles','RoleController');
     Route::resource('users','UserController');
     Route::resource('products','ProductController');
