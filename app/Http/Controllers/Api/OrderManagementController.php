@@ -38,11 +38,11 @@ class OrderManagementController extends Controller
         $total = (int)config('constants.per_mint_cost') *  (int)$request->charging_duration;
 
         $order = new Order;
-        $order->customer_id = $customer->id;
-        $order->provider_id = $request->vendor_id;
-        $order->charging_time = $request->charging_duration;
-        $order->plug_type = $request->plug_type;
-        $order->per_min_cost = config('constants.per_mint_cost');
+        $order->customer_id = (int)$customer->id;
+        $order->provider_id = (int)$request->vendor_id;
+        $order->charging_time = (int)$request->charging_duration;
+        $order->plug_type = (int)$request->plug_type;
+        $order->per_min_cost = (int)config('constants.per_mint_cost');
         $order->amount = $total;
         $order->commission = calculateAdminCommission($total, $adminCommission->admin_commission);
         $order->payment_method = config('constants.payment_method');
