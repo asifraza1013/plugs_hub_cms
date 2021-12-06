@@ -35,7 +35,7 @@ class OrderManagementController extends Controller
         $adminCommission = Setting::first();
         // add data to create order
 
-        $total = config('constants.per_mint_cost') * $request->charging_duration;
+        $total = (int)config('constants.per_mint_cost') *  (int)$request->charging_duration;
 
         $order = new Order;
         $order->customer_id = $customer->id;
