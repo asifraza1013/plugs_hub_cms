@@ -14,4 +14,9 @@ class ChargerInfo extends Model
         'charger_voltage',
         'charger_img',
     ];
+
+    public function detail()
+    {
+        return $this->belongsTo('App\ChargerBox', 'charger_plug_type', 'id');
+    }
 }

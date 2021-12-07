@@ -30,6 +30,10 @@ class Order extends Model
     {
         return $this->hasOne('App\UserApp', 'id', 'provider_id');
     }
+    public function vendorAddress()
+    {
+        return $this->hasOne('App\ServiceProvider', 'user_apps_id', 'provider_id');
+    }
     public function plugType()
     {
         return $this->hasOne('App\ChargerBox', 'id', 'plug_type');

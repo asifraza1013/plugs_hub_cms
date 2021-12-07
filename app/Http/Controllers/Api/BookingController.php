@@ -97,16 +97,18 @@ class BookingController extends Controller
                 $vendor->duration = $response['durations'];
                 $vendor->parking_img = asset('uploads/'.$vendor->parking_img);
 
-                $allData = ChargerBox::where('status', 'active')
-                ->where('type', 2)
-                ->get();
+                // $allData = ChargerBox::where('status', 'active')
+                // ->where('type', 2)
+                // ->get();
+                $allData = ChargerInfo::with(['detail'])->where('user_apps_id', $request->vendor_id)->get();
 
                 $chargerType = [];
                 foreach($allData as $item){
                     $value = (object)[
-                        'id' => $item->id,
-                        'name' => $item->name,
-                        'image' => asset('uploads/'.$item->image.'_thumbnail'.'.jpg'),
+                        'id' => $item->detail->id,
+                        'name' => $item->detail->name,
+                        'power' => config('constants.charger_capacity.'.$item->charger_capacity),
+                        'image' => asset('uploads/'.$item->detail->image.'_thumbnail'.'.jpg'),
                     ];
                     array_push($chargerType, $value);
                 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\ChargerInfo;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Order;
@@ -35,12 +36,16 @@ class OrderManagementController extends Controller
         $adminCommission = Setting::first();
         // add data to create order
 
+        // get charger power
+        $power = ChargerInfo::where('user_apps_id', $request->vendor_id)->where('charger_plug_type', $request->plug_type)->first();
+
         $total = (int)config('constants.per_mint_cost') *  (int)$request->charging_duration;
 
         $order = new Order;
         $order->customer_id = (int)$customer->id;
         $order->provider_id = (int)$request->vendor_id;
         $order->charging_time = (int)$request->charging_duration;
+        $order->power = config('constants.charger_capacity.'.$power->charger_capacity);
         $order->plug_type = (int)$request->plug_type;
         $order->per_min_cost = (int)config('constants.per_mint_cost');
         $order->amount = $total;
@@ -74,9 +79,10 @@ class OrderManagementController extends Controller
         $user = $request->user();
 
         $orders = Order::with([
+            'vendorAddress',
             'customer:id,first_name,last_name,email,phone',
             'vendor:id,first_name,last_name,email,phone',
-            'plugType:id,name'
+            'plugType:id,name',
         ]);
         if($request->has('pending') && $request->pending){
             $orders = $orders->where('request_status', 1);
