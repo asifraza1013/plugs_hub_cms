@@ -45,7 +45,7 @@ class OrderManagementController extends Controller
         $order->customer_id = (int)$customer->id;
         $order->provider_id = (int)$request->vendor_id;
         $order->charging_time = (int)$request->charging_duration;
-        $order->power = config('constants.charger_capacity.'.$power->charger_capacity);
+        $order->power = (is_null($power)) ? config('constants.charger_capacity.1') :config('constants.charger_capacity.'.$power->charger_capacity);
         $order->plug_type = (int)$request->plug_type;
         $order->per_min_cost = (int)config('constants.per_mint_cost');
         $order->amount = $total;
