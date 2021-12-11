@@ -45,6 +45,10 @@ return [
 
     5000 => ['code' => 5000, 'message' => 'You account already exist. Please try login.'],
 
+    1027 => ['code' => 1027, 'message' => 'Get order detail failed.  No record found.'],
+    1028 => ['code' => 1028, 'message' => 'Get order detail success.'],
+    1029 => ['code' => 1029, 'message' => 'Get user profile success.'],
+
 ];
 
 ?>

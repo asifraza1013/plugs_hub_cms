@@ -30,6 +30,7 @@ Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
         Route::post('/vendor_radius_detail', 'BookingController@vendorLocationDetailWithDistanceTime');
 
         Route::post('/create_booking_request', 'OrderManagementController@requestChargerBooking');
+        Route::post('/profile', 'LoginController@userProfile');
     });
 });
 
@@ -47,4 +48,6 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     Route::post('/order_list', 'OrderManagementController@orderList');
     Route::post('/approve_charger_req', 'OrderManagementController@approveChargerReq');
     Route::post('/cencel_charger_req', 'OrderManagementController@cancelChargerReq');
+    Route::post('/order_detail', 'OrderManagementController@orderDetail');
+    Route::post('/order_detail', 'OrderManagementController@orderDetail');
 });

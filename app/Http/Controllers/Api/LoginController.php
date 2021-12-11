@@ -329,4 +329,22 @@ class LoginController extends Controller
             'message' => config('response.1020.message'),
         ]);
     }
+
+    /**
+     * get user profile
+     */
+    public function userProfile(Request $request)
+    {
+        $user = $request->user();
+        if($user->image){
+            $user->image = asset('uploads/'.$user->image);
+        }
+
+        return response()->json([
+            'status' => true,
+            'profile' => $user,
+            'code' => config('response.1029.code'),
+            'message' => config('response.1029.message'),
+        ]);
+    }
 }

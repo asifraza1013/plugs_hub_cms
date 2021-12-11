@@ -96,6 +96,11 @@ class OrderManagementController extends Controller
         if($request->has('completed') && $request->completed){
             $orders = $orders->where('request_status', 4);
         }
+        if($user->app_role == 1){
+            $orders = $orders->where('customer_id', $user->id);
+        }else{
+            $orders = $orders->where('provider_id', $user->id);
+        }
         $orders = $orders->get();
         if(count($orders)){
             return response()->json([
@@ -204,6 +209,45 @@ class OrderManagementController extends Controller
             'order' => $order,
             'code' => config('response.1027.code'),
             'message' => config('response.1027.message'),
+        ]);
+    }
+
+    /**
+     * get order detail
+     */
+    public function orderDetail(Request $request)
+    {
+        $rules = [
+            'order_id' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $order = Order::with([
+            'vendorAddress',
+            'customer:id,first_name,last_name,email,phone',
+            'vendor:id,first_name,last_name,email,phone',
+            'plugType:id,name',
+        ])->where('id', $request->order_id)->first();
+
+        if(is_null($order)){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.1027.code'),
+                'message' => config('response.1027.message'),
+            ]);
+        }
+        $order->vendorAddress->parking_img = asset('uploads/'.$order->vendorAddress->parking_img);
+        return response()->json([
+            'status' => true,
+            'detail' => $order,
+            'code' => config('response.1028.code'),
+            'message' => config('response.1028.message'),
         ]);
     }
 }
