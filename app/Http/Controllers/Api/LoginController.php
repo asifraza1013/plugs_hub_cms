@@ -134,7 +134,7 @@ class LoginController extends Controller
         if($customer->status == 3){
             return response()->json([
                 'status' => false,
-                'user' => (object)['id', $customer->id, 'first_name' => $customer->first_name, 'last_name' => $customer->last_name],
+                'user' => (object)['id'=> $customer->id, 'first_name' => $customer->first_name, 'last_name' => $customer->last_name],
                 'code' => config('response.1006.code'),
                 'message' => config('response.1006.message'),
             ]);
