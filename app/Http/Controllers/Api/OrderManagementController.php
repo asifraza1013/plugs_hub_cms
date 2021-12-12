@@ -242,7 +242,9 @@ class OrderManagementController extends Controller
                 'message' => config('response.1027.message'),
             ]);
         }
-        $order->vendorAddress->parking_img = asset('uploads/'.$order->vendorAddress->parking_img);
+        if(!is_null($order->vendorAddress)){
+            $order->vendorAddress->parking_img = asset('uploads/'.$order->vendorAddress->parking_img);
+        }
         return response()->json([
             'status' => true,
             'detail' => $order,
