@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\DeviceToken;
 use App\Http\Controllers\Controller;
 use App\Notifications\SendOtpNotification;
+use App\ServiceProvider;
 use App\UserApp;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -173,6 +174,8 @@ class LoginController extends Controller
             ]
         );
 
+        $exist = ServiceProvider::where('user_apps_id', $customer->id)->first();
+
         $data = [
             'id' => $customer->id,
             'name' => $customer->first_name.' '.$customer->last_name,
@@ -182,6 +185,7 @@ class LoginController extends Controller
             'role' => config('constants.appRole.'.$customer->app_rol),
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
+            'add_detail' => ($exist) ? false : true,
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()
