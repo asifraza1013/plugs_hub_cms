@@ -43,7 +43,7 @@ class LoginController extends Controller
             return response()->json([
                 'status' => false,
                 'code' => config('response.5000.code'),
-                'code' => config('response.5000.code'),
+                'message' => config('response.5000.message'),
             ]);
         }
         // $data = [
