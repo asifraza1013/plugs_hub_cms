@@ -288,7 +288,7 @@ class OrderManagementController extends Controller
         }
         \QrCode::size(500)
             ->format('png')
-            ->generate($request->order_id, public_path('uploads/qrcode.png'));
+            ->generate($request->order_id, public_path('uploads/qr_code_'.$request->order_id.'.png'));
         return response()->json([
             'status' => true,
             'qr_code' => asset('uploads/qrcode.png'),
