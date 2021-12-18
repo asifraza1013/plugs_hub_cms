@@ -30,6 +30,8 @@ Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
         Route::post('/vendor_radius_detail', 'BookingController@vendorLocationDetailWithDistanceTime');
 
         Route::post('/create_booking_request', 'OrderManagementController@requestChargerBooking');
+        Route::post('/arrive_confirm', 'OrderManagementController@arrivedConfirmed');
+        Route::post('/charging_start', 'OrderManagementController@startCharging');
         Route::post('/profile', 'LoginController@userProfile');
     });
 });

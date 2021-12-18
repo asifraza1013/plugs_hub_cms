@@ -257,10 +257,10 @@ class OrderManagementController extends Controller
     /**
      * update arrive confirm
      */
-    public function updateOrderStatus(Request $request)
+    public function arrivedConfirmed(Request $request)
     {
         $rules = [
-            'status' => 'required|string',
+            'order_id' => 'required|numeric',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -269,6 +269,39 @@ class OrderManagementController extends Controller
         {
             return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
         }
+
+        $order = Order::where('id', $request->order_id)->first();
+        createOrderHaseStatus('arrive_confirm', $order);
+        return response([
+            'status' => true,
+            'code' => config('response.1031.code'),
+            'message' => config('response.1031.message'),
+        ]);
+    }
+
+    /**
+     * update order status. charging started
+     */
+    public function startCharging(Request $request)
+    {
+        $rules = [
+            'order_id' => 'required|numeric',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $order = Order::where('id', $request->order_id)->first();
+        createOrderHaseStatus('start_charging', $order);
+        return response([
+            'status' => true,
+            'code' => config('response.1031.code'),
+            'message' => config('response.1031.message'),
+        ]);
     }
 
     /**
