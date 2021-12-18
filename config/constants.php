@@ -102,6 +102,7 @@ return [
         1 => 'Pending',
         2 => 'Approved',
         3 => 'Completed',
+        4 => 'On Going',
     ],
     'charger_info' => [
         1 => 'Charger Box',
@@ -120,6 +121,19 @@ return [
         2 => 'Accepted',
         3 => 'Cancelled',
         4 => 'Completed',
+    ],
+
+    'all_statuses' => [
+        "Just created",
+        "Accepted by vendor",
+        "Arrive Confirm",
+        "Start Charging",
+        "Charging Complete",
+        'Cancelled by vendor',
+        'Cancelled by customer',
+        'Arrive Confirmed',
+        'Charging started',
+        'Completed',
     ],
 ];
 

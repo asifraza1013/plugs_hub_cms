@@ -48,7 +48,7 @@ return [
     1027 => ['code' => 1027, 'message' => 'Get order detail failed.  No record found.'],
     1028 => ['code' => 1028, 'message' => 'Get order detail success.'],
     1029 => ['code' => 1029, 'message' => 'Get user profile success.'],
-
+    1030 => ['code' => 1030, 'message' => 'Generate QR code success.'],
 ];
 
 ?>

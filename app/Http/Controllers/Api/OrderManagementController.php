@@ -9,6 +9,7 @@ use App\Order;
 use App\OrderHasStatus;
 use App\Setting;
 use App\Status;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -250,6 +251,48 @@ class OrderManagementController extends Controller
             'detail' => $order,
             'code' => config('response.1028.code'),
             'message' => config('response.1028.message'),
+        ]);
+    }
+
+    /**
+     * update arrive confirm
+     */
+    public function updateOrderStatus(Request $request)
+    {
+        $rules = [
+            'status' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+    }
+
+    /**
+     * create QR code for order verification
+     */
+    public function generateQrCode(Request $request)
+    {
+        $rules = [
+            'order_id' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+        \QrCode::size(500)
+            ->format('png')
+            ->generate($request->order_id, public_path('uploads/qrcode.png'));
+        return response()->json([
+            'status' => true,
+            'qr_code' => asset('uploads/qrcode.png'),
+            'message' => config('response.1030.message'),
         ]);
     }
 }
