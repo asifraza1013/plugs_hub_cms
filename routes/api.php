@@ -50,3 +50,4 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     Route::post('/cencel_charger_req', 'OrderManagementController@cancelChargerReq');
     Route::post('/order_detail', 'OrderManagementController@orderDetail');
 });
+Route::post('/generate_qr', 'Api\OrderManagementController@generateQrCode');
