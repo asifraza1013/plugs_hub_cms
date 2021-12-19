@@ -20,6 +20,7 @@ class Order extends Model
         'power',
         'per_min_cost',
         'request_status',
+        'stripe_token',
     ];
 
     public function customer()

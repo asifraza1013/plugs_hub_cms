@@ -53,6 +53,7 @@ return [
     1032 => ['code' => 1032, 'message' => 'Payment initiated successfully.'],
     1033 => ['code' => 1033, 'message' => 'Record not found. Please try again with correct data.'],
     1034 => ['code' => 1034, 'message' => 'Payment status updated successfully.'],
+    1035 => ['code' => 1035, 'message' => 'Opps! We notice that payment is not completed yet. Please try again with correct data and pay again. thank you!'],
 ];
 
 ?>

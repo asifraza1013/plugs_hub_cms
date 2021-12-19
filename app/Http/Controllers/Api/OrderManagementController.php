@@ -336,7 +336,6 @@ class OrderManagementController extends Controller
     {
         $rules = [
             'order_id' => 'required|string',
-            'status' => 'required|in:0,1',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -360,23 +359,33 @@ class OrderManagementController extends Controller
 
         Log::info('CreateIntentFor '.json_encode($order));
 
-        $order->payment_status = config('constants.payment_status.Pending');
-        $order->update();
+        try {
+            \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            $stripeIntent =  \Stripe\PaymentIntent::create([
+                'amount' => (integer) $order->amount,
+                'currency' => config('constants.currency'),
+                'payment_method_types' => ['card'],
+                ]);
 
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-       $stripeIntent =  \Stripe\PaymentIntent::create([
-        'amount' => (integer) $order->amount,
-        'currency' => config('constants.currency'),
-        'payment_method_types' => ['card'],
-        ]);
+                Log::info('STRIPERESPONSE - '.json_encode($stripeIntent));
 
-        Log::info('STRIPERESPONSE - '.json_encode($stripeIntent));
-        return response()->json([
-            'status' => true,
-            'data' => $stripeIntent,
-            'code' => config('response.1032.code'),
-            'message' => config('response.1032.message'),
-        ]);
+                $order->payment_status = config('constants.payment_status.Pending');
+                $order->stripe_token = $stripeIntent->id;
+                $order->update();
+
+                return response()->json([
+                    'status' => true,
+                    'data' => $stripeIntent,
+                    'code' => config('response.1032.code'),
+                    'message' => config('response.1032.message'),
+                ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'code' => 500,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -386,6 +395,7 @@ class OrderManagementController extends Controller
     {
         $rules = [
             'order_id' => 'required|string',
+            'status' => 'required|in:0,1',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -397,6 +407,7 @@ class OrderManagementController extends Controller
 
         $order = Order::where('id', $request->order_id)
         ->where('request_status', 2)
+        ->where('stripe_token', '!=', null)
         ->where('payment_status', config('constants.payment_status.Pending'))
         ->first();
 
@@ -410,7 +421,39 @@ class OrderManagementController extends Controller
 
         // update payment status
         if($request->status == 1){
-            $order->payment_status = config('constants.payment_status.Paid');
+            // verify user payment status
+            try {
+                $stripe = new \Stripe\StripeClient(
+                    env('STRIPE_SECRET')
+                  );
+                  $stripe->paymentIntents->capture(
+                    (string)$order->stripe_token,
+                    []
+                  );
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'code' => 500,
+                    'message' => $e->getMessage(),
+                ]);
+            }
+
+            if(is_null($stripe)){
+                return response()->json([
+                    'status' => false,
+                    'code' => config('response.1033.code'),
+                    'message' => config('response.1033.message'),
+                ]);
+            }
+            if($order->amount != $stripe->amount_received){
+                return response()->json([
+                    'status' => false,
+                    'code' => config('response.1035.code'),
+                    'message' => config('response.1035.message'),
+                ]);
+            }else{
+                $order->payment_status = config('constants.payment_status.Paid');
+            }
         }else{
             $order->payment_status = config('constants.payment_status.Cancelled');
         }
