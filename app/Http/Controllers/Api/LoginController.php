@@ -247,7 +247,8 @@ class LoginController extends Controller
         $image = $request->image;  // your base64 encoded
         // $image = str_replace('data:image/png;base64,', '', $image);
         $image = str_replace(' ', '+', $image);
-        $imageName = str_random(10).'.'.'png';
+        $imageName = Str::random(10).'.png';
+        // $imageName = str_random(10).'.'.'png';
         if($user->image){
             File::delete(public_path('users/'.$user->image));
         }
