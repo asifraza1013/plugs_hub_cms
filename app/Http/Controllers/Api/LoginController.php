@@ -252,7 +252,7 @@ class LoginController extends Controller
         if($user->image){
             File::delete(public_path('users/'.$user->image));
         }
-        File::put(public_path('users/'.$imageName), base64_decode($image));
+        File::put(public_path('uploads/'.$imageName), base64_decode($image));
         $user->image = $imageName;
         $user->save();
         return response()->json([
