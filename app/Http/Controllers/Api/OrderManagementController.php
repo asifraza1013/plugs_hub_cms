@@ -375,7 +375,13 @@ class OrderManagementController extends Controller
 
                 return response()->json([
                     'status' => true,
-                    'data' => $stripeIntent,
+                    'data' => (object)[
+                        'intent' => $stripeIntent->id,
+                        'amount' => $stripeIntent->amount,
+                        'currency' =>  $stripeIntent->currency,
+                        'payment_method_types' =>  $stripeIntent->payment_method_types,
+                        'status' =>  $stripeIntent->status,
+                    ],
                     'code' => config('response.1032.code'),
                     'message' => config('response.1032.message'),
                 ]);
