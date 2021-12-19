@@ -112,7 +112,8 @@ return [
     'per_mint_cost' => 15,
     'payment_method' => 'Strip',
     'payment_status' => [
-        'Unpaid' => 'Unpaid',
+        'Failed' => 'Failed',
+        'Cancelled' => 'Cancelled',
         'Paid' => 'Paid',
         'Pending' => 'Pending',
     ],
@@ -135,6 +136,7 @@ return [
         'Charging started',
         'Completed',
     ],
+    'currency' => 'AED'
 ];
 
 ?>

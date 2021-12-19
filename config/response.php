@@ -50,6 +50,9 @@ return [
     1029 => ['code' => 1029, 'message' => 'Get user profile success.'],
     1030 => ['code' => 1030, 'message' => 'Generate QR code success.'],
     1031 => ['code' => 1031, 'message' => 'Order Status changed successfully.'],
+    1032 => ['code' => 1032, 'message' => 'Payment initiated successfully.'],
+    1033 => ['code' => 1033, 'message' => 'Record not found. Please try again with correct data.'],
+    1034 => ['code' => 1034, 'message' => 'Payment status updated successfully.'],
 ];
 
 ?>

@@ -328,4 +328,97 @@ class OrderManagementController extends Controller
             'message' => config('response.1030.message'),
         ]);
     }
+
+    /**
+     * initiate payment
+     */
+    public function initiateCustomerPayment(Request $request)
+    {
+        $rules = [
+            'order_id' => 'required|string',
+            'status' => 'required|in:0,1',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        // find order
+        $order = Order::where('id', $request->order_id)
+        ->where('request_status', 2)
+        ->first();
+        if(is_null($order)){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.1033.code'),
+                'message' => config('response.1033.message'),
+            ]);
+        }
+
+        Log::info('CreateIntentFor '.json_encode($order));
+
+        $order->payment_status = config('constants.payment_status.Pending');
+        $order->update();
+
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+       $stripeIntent =  \Stripe\PaymentIntent::create([
+        'amount' => (integer) $order->amount,
+        'currency' => config('constants.currency'),
+        'payment_method_types' => ['card'],
+        ]);
+
+        Log::info('STRIPERESPONSE - '.json_encode($stripeIntent));
+        return response()->json([
+            'status' => true,
+            'data' => $stripeIntent,
+            'code' => config('response.1032.code'),
+            'message' => config('response.1032.message'),
+        ]);
+    }
+
+    /**
+     * update payment status
+     */
+    public function updateCustomerPayment(Request $request)
+    {
+        $rules = [
+            'order_id' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $order = Order::where('id', $request->order_id)
+        ->where('request_status', 2)
+        ->where('payment_status', config('constants.payment_status.Pending'))
+        ->first();
+
+        if(is_null($order)){
+            return response()->json([
+                'status' => false,
+                'code' => config('response.1033.code'),
+                'message' => config('response.1033.message'),
+            ]);
+        }
+
+        // update payment status
+        if($request->status == 1){
+            $order->payment_status = config('constants.payment_status.Paid');
+        }else{
+            $order->payment_status = config('constants.payment_status.Cancelled');
+        }
+        $order->update();
+        return response()->json([
+            'status' => true,
+            'code' => config('response.1034.code'),
+            'message' => config('response.1034.message'),
+        ]);
+    }
 }

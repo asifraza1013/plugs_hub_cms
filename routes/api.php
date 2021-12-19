@@ -33,6 +33,10 @@ Route::group(['prefix' => 'customer', 'namespace' => 'Api'], function () {
         Route::post('/arrive_confirm', 'OrderManagementController@arrivedConfirmed');
         Route::post('/charging_start', 'OrderManagementController@startCharging');
         Route::post('/profile', 'LoginController@userProfile');
+
+        // payment APIs
+        Route::post('/initiate_payment', 'OrderManagementController@initiateCustomerPayment');
+        Route::post('/update_payment_status', 'OrderManagementController@updateCustomerPayment');
     });
 });
 
