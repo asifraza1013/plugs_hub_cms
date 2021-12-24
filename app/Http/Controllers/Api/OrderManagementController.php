@@ -362,7 +362,7 @@ class OrderManagementController extends Controller
         try {
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
             $stripeIntent =  \Stripe\PaymentIntent::create([
-                'amount' => (integer) $order->amount,
+                'amount' => (integer) $order->amount * 100,
                 'currency' => config('constants.currency'),
                 'payment_method_types' => ['card'],
                 ]);
