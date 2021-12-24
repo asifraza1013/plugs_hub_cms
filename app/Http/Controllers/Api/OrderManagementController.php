@@ -377,6 +377,7 @@ class OrderManagementController extends Controller
                     'status' => true,
                     'data' => (object)[
                         'intent' => $stripeIntent->id,
+                        'client_scrt' => $stripeIntent->client_secret,
                         'amount' => $stripeIntent->amount,
                         'currency' =>  $stripeIntent->currency,
                         'payment_method_types' =>  $stripeIntent->payment_method_types,
