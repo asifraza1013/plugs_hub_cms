@@ -433,7 +433,7 @@ class OrderManagementController extends Controller
                 $stripe = new \Stripe\StripeClient(
                     env('STRIPE_SECRET')
                   );
-                  $stripe->paymentIntents->capture(
+                  $stripe->paymentIntents->retrieve(
                     (string)$order->stripe_token,
                     []
                   );
