@@ -437,6 +437,7 @@ class OrderManagementController extends Controller
                     (string)$order->stripe_token,
                     []
                   );
+                Log::info('UpdateStatusRes - '.json_encode($stripe));
             } catch (\Exception $e) {
                 return response()->json([
                     'status' => false,
