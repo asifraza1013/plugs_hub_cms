@@ -12,6 +12,8 @@ use App\Status;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class OrderManagementController extends Controller
 {
@@ -470,6 +472,38 @@ class OrderManagementController extends Controller
             'status' => true,
             'code' => config('response.1034.code'),
             'message' => config('response.1034.message'),
+        ]);
+    }
+
+    /**
+     * upload media
+     */
+    public function uploadMedia(Request $request)
+    {
+        $rules = [
+            'image' => 'required|array',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return response()->json(['status' => false, 'status_code' => 1013, 'data' => $errors]);
+        }
+
+        $links = [];
+        foreach($request->image as $image){
+            // $image = $request->image;  // your base64 encoded
+            $image = str_replace(' ', '+', $image);
+            $imageName = Str::random(10).'.png';
+            File::put(public_path('uploads/'.$imageName), base64_decode($image));
+            array_push($links, $imageName);
+        }
+        return response()->json([
+            'status' => true,
+            'code' => '1035',
+            'message' => 'Media uploaded successfully',
+            'links' => $links
         ]);
     }
 }

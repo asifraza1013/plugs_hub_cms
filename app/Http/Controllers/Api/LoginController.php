@@ -250,7 +250,7 @@ class LoginController extends Controller
         $imageName = Str::random(10).'.png';
         // $imageName = str_random(10).'.'.'png';
         if($user->image){
-            File::delete(public_path('users/'.$user->image));
+            File::delete(public_path('uploads/'.$user->image));
         }
         File::put(public_path('uploads/'.$imageName), base64_decode($image));
         $user->image = $imageName;
