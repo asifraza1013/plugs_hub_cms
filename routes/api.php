@@ -58,5 +58,5 @@ Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     Route::post('/generate_qr', 'OrderManagementController@generateQrCode');
 
 
-    Route::post('/generate_qr', 'OrderManagementController@generateQrCode');
+    Route::post('/upload_media', 'OrderManagementController@uploadMedia');
 });
