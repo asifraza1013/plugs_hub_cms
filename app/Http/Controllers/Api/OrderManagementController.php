@@ -481,7 +481,7 @@ class OrderManagementController extends Controller
     public function uploadMedia(Request $request)
     {
         $rules = [
-            'image' => 'required|array',
+            'images' => 'required|array',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -498,8 +498,12 @@ class OrderManagementController extends Controller
             $imageName = Str::random(10).'.png';
             File::put(public_path('uploads/'.$imageName), base64_decode($image));
             // array_push($links, $imageName);
-            $links[$key] = [$imageName];
+            $links[$key] = [asset('uploads/'.$imageName)];
         }
+        ['bill' => 'string', 'parking' => 'string'];
+        [
+            'bill' => (object)['string'],
+        ];
         return response()->json([
             'status' => true,
             'code' => '1035',
