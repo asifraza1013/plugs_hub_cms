@@ -492,7 +492,7 @@ class OrderManagementController extends Controller
         }
 
         $links = [];
-        foreach($request->image as $key=>$image){
+        foreach($request->images as $key=>$image){
             // $image = $request->image;  // your base64 encoded
             $image = str_replace(' ', '+', $image);
             $imageName = Str::random(10).'.png';
