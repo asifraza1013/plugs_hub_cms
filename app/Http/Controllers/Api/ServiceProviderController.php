@@ -17,6 +17,7 @@ class ServiceProviderController extends Controller
      */
     public function providorDetail(Request $request)
     {
+        Log::info('providorDetail---'.json_encode($request->all()));
         $rules = [
             'country' => 'required|string',
             'city' => 'required|string',
